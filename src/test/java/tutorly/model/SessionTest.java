@@ -4,8 +4,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 
 import org.junit.jupiter.api.Test;
+
+import tutorly.model.person.Address;
+import tutorly.model.person.Email;
+import tutorly.model.person.Name;
+import tutorly.model.person.Person;
+import tutorly.model.person.Phone;
+import tutorly.model.person.UniquePersonList;
 
 class SessionTest {
 
@@ -23,9 +31,24 @@ class SessionTest {
 
     @Test
     void testToString() {
-        Session session = new Session(67890, LocalDate.of(2025, 3, 15), "Physics");
-        String expected = "Session{sessionId=67890, date=2025-03-15, subject=Physics, students=" + session.getStudents() + "}";
-        assertEquals(expected, session.toString());
+        // Arrange
+        UniquePersonList students = new UniquePersonList();
+        students.add(new Person(new Name("Alice"), new Phone("12345678"), new Email("alice@example.com"), new Address("123 Street"), new HashSet<>()));
+        int sessionId = 123;
+        LocalDate date = LocalDate.of(2025, 3, 19);
+        String subject = "Mathematics";
+
+        Session session = new Session(sessionId, date, subject, students);
+
+        // Act
+        String expected = "Session{students=[tutorly.model.person" +
+                ".Person{name=Alice, phone=12345678, email=alice@example.com" +
+                ", address=123 Street, tags=[]}], sessionId=123" +
+                ", date=2025-03-19, subject=Mathematics}";
+        String actual = session.toString();
+
+        // Assert
+        assertEquals(expected, actual);
     }
 
     @Test

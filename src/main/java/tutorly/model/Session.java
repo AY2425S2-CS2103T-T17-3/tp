@@ -98,11 +98,7 @@ public class Session {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .add("sessionId", sessionId)
-                .add("date", date)
-                .add("subject", subject)
-                .add("students", students)
-                .toString();
+        return "Session{students=" + students + ", sessionId="
+                + sessionId + ", date=" + date + ", subject=" + subject + "}";
     }
 }
