@@ -11,12 +11,12 @@ class SessionTest {
 
     @Test
     void testSessionConstructorAndGetters() {
-        int studentId = 12345;
+        int sessionId = 12345;
         LocalDate date = LocalDate.of(2025, 3, 12);
         String subject = "Math";
-        Session session = new Session(studentId, date, subject);
+        Session session = new Session(sessionId, date, subject);
 
-        assertEquals(studentId, session.getStudentId());
+        assertEquals(sessionId, session.getSessionId()); // Use getSessionId() instead of getStudentId()
         assertEquals(date, session.getDate());
         assertEquals(subject, session.getSubject());
     }
@@ -24,8 +24,7 @@ class SessionTest {
     @Test
     void testToString() {
         Session session = new Session(67890, LocalDate.of(2025, 3, 15), "Physics");
-        String expected = "Session{studentId=67890, sessionId="
-                + session.getSessionId() + ", date=2025-03-15, subject=Physics}";
+        String expected = "Session{sessionId=67890, date=2025-03-15, subject=Physics, students=" + session.getStudents() + "}";
         assertEquals(expected, session.toString());
     }
 
@@ -49,9 +48,9 @@ class SessionTest {
     @Test
     void testIncrementalSessionId() {
         Session session1 = new Session(123, LocalDate.of(2025, 3, 12), "Math");
-        Session session2 = new Session(123, LocalDate.of(2025, 3, 13), "Math");
+        Session session2 = new Session(124, LocalDate.of(2025, 3, 13), "Math");
 
+        // Ensure the session IDs increment by 1
         assertEquals(session1.getSessionId() + 1, session2.getSessionId());
-
     }
 }

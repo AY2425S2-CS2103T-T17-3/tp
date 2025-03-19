@@ -1,74 +1,99 @@
 package tutorly.model;
+
+import static tutorly.commons.util.CollectionUtil.requireAllNonNull;
+
 import java.time.LocalDate;
+import java.util.Objects;
 
-/**
- * Represents a tutoring session for a student.
- */
+import tutorly.commons.util.ToStringBuilder;
+import tutorly.model.person.UniquePersonList;
+
 public class Session {
-    private static int nextSessionId = 1;
-    private int studentId;
-    private LocalDate date;
-    private int sessionId;
-    private String subject;
 
-    /**
-     * Constructs a new Session with an auto-incremented session ID.
-     *
-     * @param studentId The unique identifier of the student.
-     * @param date The date of the session.
-     * @param subject The subject of the session.
-     */
-    public Session(int studentId, LocalDate date, String subject) {
-        this.studentId = studentId;
+    public static final String MESSAGE_CONSTRAINTS = "Session must have a valid session ID and at least one student.";
+
+    private int sessionId;// sessionId field is effectively final
+    private final LocalDate date;
+    private final String subject;
+    private final UniquePersonList students;
+
+    public Session(int sessionId, LocalDate date, String subject, UniquePersonList students) {
+        requireAllNonNull(sessionId, date, subject, students);
+        this.sessionId = sessionId;
         this.date = date;
-        this.sessionId = nextSessionId++;
         this.subject = subject;
+        this.students = students;
     }
 
-    /**
-     * Gets the student ID associated with this session.
-     *
-     * @return The student ID.
-     */
-    public int getStudentId() {
-        return studentId;
+    // Overloaded constructor for creating a session without students
+    public Session(int sessionId, LocalDate date, String subject) {
+        requireAllNonNull(sessionId, date, subject);
+        this.sessionId = sessionId;
+        this.date = date;
+        this.subject = subject;
+        this.students = new UniquePersonList();
     }
 
-    /**
-     * Gets the session date.
-     *
-     * @return The date of the session.
-     */
-    public LocalDate getDate() {
-        return date;
+    public void setId(int sessionId) {
+        if (this.sessionId != 0) {
+            throw new IllegalStateException("Session ID has already been set for this session.");
+        }
+
+        if (sessionId < 1) {
+            throw new IllegalArgumentException("Session ID must be a positive integer.");
+        }
+
+        this.sessionId = sessionId;
     }
 
-    /**
-     * Gets the session ID.
-     *
-     * @return The session ID.
-     */
     public int getSessionId() {
         return sessionId;
     }
 
-    /**
-     * Gets the subject of the session.
-     *
-     * @return The subject of the session.
-     */
+    public LocalDate getDate() {
+        return date;
+    }
+
     public String getSubject() {
         return subject;
     }
 
+    public UniquePersonList getStudents() {
+        return students;
+    }
+
     /**
-     * Returns a string representation of the session.
-     *
-     * @return A formatted string with student ID, session ID, date, and subject.
+     * Returns true if both sessions have the same identity and data fields.
+     * This defines a stronger notion of equality between two sessions.
      */
     @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+
+        if (!(other instanceof Session otherSession)) {
+            return false;
+        }
+
+        return sessionId == otherSession.sessionId
+                && date.equals(otherSession.date)
+                && subject.equals(otherSession.subject)
+                && students.equals(otherSession.students);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(sessionId, date, subject, students);
+    }
+
+    @Override
     public String toString() {
-        return "Session{studentId=" + studentId + ", sessionId="
-                + sessionId + ", date=" + date + ", subject=" + subject + "}";
+        return new ToStringBuilder(this)
+                .add("sessionId", sessionId)
+                .add("date", date)
+                .add("subject", subject)
+                .add("students", students)
+                .toString();
     }
 }
