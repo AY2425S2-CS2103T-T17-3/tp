@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import tutorly.model.person.Address;
 import tutorly.model.person.Email;
+import tutorly.model.person.Memo;
 import tutorly.model.person.Name;
 import tutorly.model.person.Person;
 import tutorly.model.person.Phone;
@@ -33,7 +34,7 @@ class SessionTest {
     void testToString() {
         // Arrange
         UniquePersonList students = new UniquePersonList();
-        students.add(new Person(new Name("Alice"), new Phone("12345678"), new Email("alice@example.com"), new Address("123 Street"), new HashSet<>()));
+        students.add(new Person(new Name("Alice"), new Phone("12345678"), new Email("alice@example.com"), new Address("123 Street"), new HashSet<>(), new Memo("Sample Memo")));
         int sessionId = 123;
         LocalDate date = LocalDate.of(2025, 3, 19);
         String subject = "Mathematics";
@@ -42,8 +43,8 @@ class SessionTest {
 
         // Act
         String expected = "Session{students=[tutorly.model.person" +
-                ".Person{name=Alice, phone=12345678, email=alice@example.com" +
-                ", address=123 Street, tags=[]}], sessionId=123" +
+                ".Person{id=0, name=Alice, phone=12345678, email=alice@example.com" +
+                ", address=123 Street, tags=[], memo=Sample Memo}], sessionId=123" +
                 ", date=2025-03-19, subject=Mathematics}";
         String actual = session.toString();
 
