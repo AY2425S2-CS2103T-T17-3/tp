@@ -16,6 +16,7 @@ import tutorly.model.person.UniquePersonList;
 public class AddressBook implements ReadOnlyAddressBook {
 
     private final UniquePersonList persons;
+    private final UniquePersonList archivedPersons;
 
     /*
      * The 'unusual' code block below is a non-static initialization block, sometimes used to avoid duplication
@@ -26,9 +27,11 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     {
         persons = new UniquePersonList();
+        archivedPersons = new UniquePersonList();
     }
 
-    public AddressBook() {}
+    public AddressBook() {
+    }
 
     /**
      * Creates an AddressBook using the Persons in the {@code toBeCopied}
@@ -73,6 +76,11 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void addPerson(Person p) {
         persons.add(p);
+
+        if (p.getId() == 0) {
+            // Set the student ID of the person if it has not been set
+            p.setId(getTotalPersons());
+        }
     }
 
     /**
@@ -92,9 +100,17 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void removePerson(Person key) {
         persons.remove(key);
+        archivedPersons.add(key);
     }
 
     //// util methods
+
+    /**
+     * Returns the total number of persons that have been added to the address book, both current and archived.
+     */
+    public int getTotalPersons() {
+        return persons.size() + archivedPersons.size();
+    }
 
     @Override
     public String toString() {
@@ -115,11 +131,10 @@ public class AddressBook implements ReadOnlyAddressBook {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof AddressBook)) {
+        if (!(other instanceof AddressBook otherAddressBook)) {
             return false;
         }
 
-        AddressBook otherAddressBook = (AddressBook) other;
         return persons.equals(otherAddressBook.persons);
     }
 
