@@ -5,7 +5,6 @@ import static tutorly.commons.util.CollectionUtil.requireAllNonNull;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import tutorly.commons.util.ToStringBuilder;
 import tutorly.model.person.UniquePersonList;
 
 /**
