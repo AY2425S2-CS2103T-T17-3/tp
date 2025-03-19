@@ -8,15 +8,22 @@ import java.util.Objects;
 import tutorly.commons.util.ToStringBuilder;
 import tutorly.model.person.UniquePersonList;
 
+/**
+ * Represents a Session in the tutorly.
+ * Guarantees: details are present and not null, field values are validated.
+ */
 public class Session {
 
     public static final String MESSAGE_CONSTRAINTS = "Session must have a valid session ID and at least one student.";
 
-    private int sessionId;// sessionId field is effectively final
+    private int sessionId; // sessionId field is effectively final
     private final LocalDate date;
     private final String subject;
     private final UniquePersonList students;
 
+    /**
+     * Every field must be present and not null.
+     */
     public Session(int sessionId, LocalDate date, String subject, UniquePersonList students) {
         requireAllNonNull(sessionId, date, subject, students);
         this.sessionId = sessionId;
@@ -25,7 +32,9 @@ public class Session {
         this.students = students;
     }
 
-    // Overloaded constructor for creating a session without students
+    /**
+     * The constructor without students when creating a new session.
+     */
     public Session(int sessionId, LocalDate date, String subject) {
         requireAllNonNull(sessionId, date, subject);
         this.sessionId = sessionId;
