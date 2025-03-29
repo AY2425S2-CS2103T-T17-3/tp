@@ -2,7 +2,6 @@ package tutorly.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static tutorly.model.Model.FILTER_SHOW_ALL_PERSONS;
 import static tutorly.testutil.Assert.assertThrows;
@@ -18,7 +17,6 @@ import org.junit.jupiter.api.Test;
 
 import tutorly.commons.core.GuiSettings;
 import tutorly.model.filter.NameContainsKeywordsFilter;
-import tutorly.model.person.Identity;
 import tutorly.testutil.AddressBookBuilder;
 
 public class ModelManagerTest {
@@ -92,34 +90,9 @@ public class ModelManagerTest {
     }
 
     @Test
-    public void getPersonByIdentity_personInAddressBook_returnsPerson() {
-        modelManager.addPerson(ALICE);
-        assertEquals(ALICE, modelManager.getPersonByIdentity(new Identity(ALICE.getId()), false).get());
-    }
-
-    @Test
-    public void getPersonByIdentity_personNotInAddressBook_returnsEmpty() {
-        assertTrue(modelManager.getPersonByIdentity(new Identity(ALICE.getId()), false).isEmpty());
-    }
-
-    @Test
-    public void getPersonByIdentity_personInArchivedList_returnsPerson() {
-        modelManager.addPerson(ALICE);
-        modelManager.deletePerson(ALICE);
-        assertEquals(ALICE, modelManager.getPersonByIdentity(new Identity(ALICE.getName()), true).get());
-    }
-
-    @Test
-    public void getPersonByIdentity_personNotInArchivedList_returnsEmpty() {
-        assertTrue(modelManager.getPersonByIdentity(new Identity(ALICE.getId()), true).isEmpty());
-    }
-
-
-    @Test
     public void hasAttendanceRecord_recordInAddressBook_returnsFalse() {
         assertFalse(modelManager.hasAttendanceRecord(ALICE_ATTEND_ENGLISH));
     }
-
     @Test
     public void hasAttendanceRecord_recordInAddressBook_returnsTrue() {
         modelManager.addAttendanceRecord(ALICE_ATTEND_ENGLISH);
@@ -140,24 +113,24 @@ public class ModelManagerTest {
         // same values -> returns true
         modelManager = new ModelManager(addressBook, userPrefs);
         ModelManager modelManagerCopy = new ModelManager(addressBook, userPrefs);
-        assertEquals(modelManager, modelManagerCopy);
+        assertTrue(modelManager.equals(modelManagerCopy));
 
         // same object -> returns true
-        assertEquals(modelManager, modelManager);
+        assertTrue(modelManager.equals(modelManager));
 
         // null -> returns false
-        assertNotEquals(null, modelManager);
+        assertFalse(modelManager.equals(null));
 
         // different types -> returns false
-        assertNotEquals(5, modelManager);
+        assertFalse(modelManager.equals(5));
 
         // different addressBook -> returns false
-        assertNotEquals(modelManager, new ModelManager(differentAddressBook, userPrefs));
+        assertFalse(modelManager.equals(new ModelManager(differentAddressBook, userPrefs)));
 
         // different filteredList -> returns false
         String[] keywords = ALICE.getName().fullName.split("\\s+");
         modelManager.updateFilteredPersonList(new NameContainsKeywordsFilter(Arrays.asList(keywords)));
-        assertNotEquals(modelManager, new ModelManager(addressBook, userPrefs));
+        assertFalse(modelManager.equals(new ModelManager(addressBook, userPrefs)));
 
         // resets modelManager to initial state for upcoming tests
         modelManager.updateFilteredPersonList(FILTER_SHOW_ALL_PERSONS);
@@ -165,6 +138,6 @@ public class ModelManagerTest {
         // different userPrefs -> returns false
         UserPrefs differentUserPrefs = new UserPrefs();
         differentUserPrefs.setAddressBookFilePath(Paths.get("differentFilePath"));
-        assertNotEquals(modelManager, new ModelManager(addressBook, differentUserPrefs));
+        assertFalse(modelManager.equals(new ModelManager(addressBook, differentUserPrefs)));
     }
 }

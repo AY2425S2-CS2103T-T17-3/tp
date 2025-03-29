@@ -13,7 +13,6 @@ import tutorly.commons.core.GuiSettings;
 import tutorly.commons.core.LogsCenter;
 import tutorly.model.attendancerecord.AttendanceRecord;
 import tutorly.model.filter.Filter;
-import tutorly.model.person.Identity;
 import tutorly.model.person.Name;
 import tutorly.model.person.Person;
 import tutorly.model.session.Session;
@@ -141,17 +140,6 @@ public class ModelManager implements Model {
         return addressBook.getPersonByName(name);
     }
 
-    @Override
-    public Optional<Person> getPersonByIdentity(Identity identity, boolean fromArchived) {
-        if (identity.isIdPresent()) {
-            return getPersonById(identity.getId(), fromArchived);
-        } else if (identity.isNamePresent()) {
-            return getPersonByName(identity.getName(), fromArchived);
-        }
-
-        return Optional.empty();
-    }
-
     //=========== Filtered Person List Accessors =============================================================
 
     @Override
@@ -174,8 +162,7 @@ public class ModelManager implements Model {
         return filteredSessions;
     }
 
-    @Override
-    public ObservableList<AttendanceRecord> getAttendanceRecordList() {
+    @Override public ObservableList<AttendanceRecord> getAttendanceRecordList() {
         return addressBook.getAttendanceRecordsList();
     }
 

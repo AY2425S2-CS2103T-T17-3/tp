@@ -37,7 +37,7 @@ public class DeleteStudentCommand extends StudentCommand {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
-        Optional<Person> toDelete = model.getPersonByIdentity(identity, false);
+        Optional<Person> toDelete = identity.getPerson(model);
         if (toDelete.isEmpty()) {
             throw new CommandException(Messages.MESSAGE_PERSON_NOT_FOUND);
         }

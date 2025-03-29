@@ -37,7 +37,7 @@ public class RestoreStudentCommand extends StudentCommand {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
-        Optional<Person> toRestore = model.getPersonByIdentity(identity, true);
+        Optional<Person> toRestore = identity.getPerson(model, true);
         if (toRestore.isEmpty()) {
             throw new CommandException(Messages.MESSAGE_PERSON_NOT_FOUND);
         }

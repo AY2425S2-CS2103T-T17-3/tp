@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static tutorly.logic.commands.CommandTestUtil.assertCommandFailure;
 import static tutorly.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static tutorly.testutil.TypicalAddressBook.getTypicalAddressBook;
-import static tutorly.testutil.TypicalIdentities.IDENTITY_FIRST_PERSON;
 
 import org.junit.jupiter.api.Test;
 
@@ -27,8 +26,9 @@ public class DeleteStudentCommandTest {
 
     @Test
     public void execute_validIdentity_success() {
-        Person personToDelete = model.getPersonByIdentity(IDENTITY_FIRST_PERSON, false).get();
-        DeleteStudentCommand deleteCommand = new DeleteStudentCommand(IDENTITY_FIRST_PERSON);
+        Identity identity = new Identity(1);
+        Person personToDelete = identity.getPerson(model).get();
+        DeleteStudentCommand deleteCommand = new DeleteStudentCommand(identity);
 
         String expectedMessage = String.format(DeleteStudentCommand.MESSAGE_DELETE_PERSON_SUCCESS,
                 Messages.format(personToDelete));
