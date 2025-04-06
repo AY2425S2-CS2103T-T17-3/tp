@@ -91,6 +91,9 @@ Refer to the [Features](#features) below for details of each command.
 * Extra parameters for commands that do not take in parameters ([general](#general-commands) commands, `student list` and `session list`) will be ignored.<br>
   e.g. if the command specifies `help 123` or `session list blah`, it will be interpreted as `help` and `session list`.
 
+* If the word entered after `student` or `session` is not a supported action, it will be treated as a [STUDENT_IDENTIFIER](#glossary) for the [view student](#viewing-student-card-student-student_identifier) command, 
+or the `SESSION_ID` for the [view attendance](#viewing-attendance-for-a-session-session-session_id) command respectively.
+
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </div>
 
